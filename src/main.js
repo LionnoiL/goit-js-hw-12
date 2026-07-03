@@ -24,7 +24,6 @@ loadMoreBtnEl.addEventListener('click', () => {
 
 const searchHeandler = () => {
   render.clearGallery();
-  render.hideLoadMoreButton();
 
   if (!validate(searchText)) {
     showErrorMessage('Please enter a valid query.');
@@ -34,43 +33,41 @@ const searchHeandler = () => {
   loadImages(searchText, currentPage);
 };
 
-const loadImages = (searchText, page) => {
+const loadImages = async (searchText, page) => {
+  render.hideLoadMoreButton();
   render.showLoader();
 
-  pixabay
-    .getImagesByQuery(searchText, page)
-    .then(data => {
-      const images = data.hits;
+  try {
+    const data = await pixabay.getImagesByQuery(searchText, page);
 
-      if (images.length === 0) {
-        showErrorMessage(
-          'Sorry, there are no images matching your search query. Please try again!'
-        );
-        return;
-      } else {
-        render.createGallery(images);
+    const images = data.hits;
 
-        if (currentPage > 1) {
-          scroll();
-        }
+    if (images.length === 0) {
+      showErrorMessage(
+        'Sorry, there are no images matching your search query. Please try again!'
+      );
+      return;
+    } else {
+      render.createGallery(images);
 
-        if (perPage * currentPage >= data.totalHits) {
-          showErrorMessage(
-            `We're sorry, but you've reached the end of search results.`
-          );
-          render.hideLoadMoreButton();
-        } else {
-          render.showLoadMoreButton();
-        }
+      if (currentPage > 1) {
+        scroll();
       }
-    })
-    .catch(error => {
-      console.error(error);
-      showErrorMessage('Error while executing request');
-    })
-    .finally(() => {
-      render.hideLoader();
-    });
+
+      if (perPage * currentPage >= data.totalHits) {
+        showErrorMessage(
+          `We're sorry, but you've reached the end of search results.`
+        );
+      } else {
+        render.showLoadMoreButton();
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    showErrorMessage('Error while executing request');
+  }
+
+  render.hideLoader();
 };
 
 function validate(searchText) {
