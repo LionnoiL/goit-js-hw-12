@@ -40,8 +40,6 @@ const loadImages = async (searchText, page) => {
   try {
     const data = await pixabay.getImagesByQuery(searchText, page);
 
-    render.hideLoader();
-
     const images = data.hits;
 
     if (images.length === 0) {
@@ -67,6 +65,8 @@ const loadImages = async (searchText, page) => {
   } catch (error) {
     console.error(error);
     showErrorMessage('Error while executing request');
+  } finally {
+    render.hideLoader();
   }
 };
 
