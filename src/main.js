@@ -23,6 +23,7 @@ loadMoreBtnEl.addEventListener('click', () => {
 
 const searchHeandler = () => {
   render.clearGallery();
+  render.hideLoadMoreButton();
 
   if (!validate(searchText)) {
     showErrorMessage('Please enter a valid query.');
