@@ -10,6 +10,7 @@ let currentPage = 1;
 
 const formEl = document.querySelector('.form');
 formEl.addEventListener('submit', e => {
+  currentPage = 1;
   e.preventDefault();
   searchText = e.currentTarget.elements['search-text'].value.trim();
   searchHeandler();
