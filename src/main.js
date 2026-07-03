@@ -50,7 +50,7 @@ const loadImages = (searchText, page) => {
       } else {
         render.createGallery(images);
 
-        if (currentPage !== 1) {
+        if (currentPage > 1) {
           scroll();
         }
 
